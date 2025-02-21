@@ -1,7 +1,12 @@
 <template>
  <div id="app">
     <h1>Employee Registration Application</h1>
-
+      <label >Name: </label>
+      <input type="text" v-model="name" />
+      <br />
+      <label> Age: </label>
+      <input type="text" v-model="age" />
+      <br />
     <div v-if="!image">
       <h2>Select an image</h2>
       <input type="file" @change="onFileChange">
