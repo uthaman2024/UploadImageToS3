@@ -7,6 +7,11 @@
       <label> Age: </label>
       <input type="text" v-model="age" />
       <br />
+        <label> Emp Code: </label>
+      <input type="text" v-model="empcode" />
+      <br />
+      <br />
+      
     <div v-if="!image">
       <h2>Select an image</h2>
       <input type="file" @change="onFileChange">
@@ -26,7 +31,7 @@
 //import Vue from 'vue/dist/vue.js';
 import axios from "axios";
 
-const MAX_IMAGE_SIZE = 1000000
+const MAX_IMAGE_SIZE = 2000000
 
 /* ENTER YOUR ENDPOINT HERE
    FILES UPLOADED TO MY ENDPOINT ARE AUTOMATICALLY DELETED EVERY FEW HOURS */
