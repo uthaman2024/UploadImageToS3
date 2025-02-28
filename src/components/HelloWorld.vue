@@ -2,9 +2,15 @@
  <div id="app">
     <h1>Employee Registration Application</h1>
     <form @submit.prevent="submitForm">
-      <input v-model="name" placeholder="Enter Name" required /><br /><br />
-      <input v-model="age" type="number" placeholder="Enter Age" required /><br /><br />
-      <input v-model="empcode" placeholder="Enter Employee Code" required /><br /><br />    
+      <input v-model="name" placeholder="Enter Name" @input="validateName" required />
+      <span v-if="nameError" style="color: red;">{{ nameError }}</span>
+      <br /><br />
+      <input v-model="age" type="text" placeholder="Enter Age" @input="validateAge" required />
+      <span v-if="ageError" style="color: red;">{{ ageError }}</span>
+      <br /><br />
+      <input v-model="empcode" placeholder="Enter Employee Code" @input="validateEmpCode" required />
+      <span v-if="empCodeError" style="color: red;">{{ empCodeError }}</span>
+      <br /><br />    
       <div v-if="!image">
         <h2>Select an image</h2>
         <input type="file" @change="onFileChange">
@@ -40,7 +46,9 @@ export default {
         age: '',
         empcode: '',
         image: null,
-        : ''
+        nameError: "",
+        ageError: "",
+        empCodeError: "",
       }
     },
   methods: {
