@@ -1,27 +1,21 @@
 <template>
  <div id="app">
     <h1>Employee Registration Application</h1>
-      <label >Name: </label>
-      <input type="text" v-model="name" />
-      <br />
-      <label> Age: </label>
-      <input type="text" v-model="age" />
-      <br />
-        <label> Emp Code: </label>
-      <input type="text" v-model="empcode" />
-      <br />
-      <br />
-      
-    <div v-if="!image">
-      <h2>Select an image</h2>
-      <input type="file" @change="onFileChange">
-    </div>
-    <div v-else>
-      <img :src="image" />
-      <button v-if="!uploadURL" @click="removeImage">Remove image</button>
-      <button v-if="!uploadURL" @click="uploadImage">Upload image</button>
-    </div>
-    <h2 v-if="uploadURL">Success! Image uploaded to bucket.</h2>
+    <form @submit.prevent="submitForm">
+      <input v-model="name" placeholder="Enter Name" required /><br /><br />
+      <input v-model="age" type="number" placeholder="Enter Age" required /><br /><br />
+      <input v-model="empcode" placeholder="Enter Employee Code" required /><br /><br />    
+      <div v-if="!image">
+        <h2>Select an image</h2>
+        <input type="file" @change="onFileChange">
+      </div>
+      <div v-else>
+        <img :src="image" />
+        <button v-if="!" @click="removeImage">Remove image</button>
+        <button v-if="!" @click="uploadImage">Upload image</button>
+      </div>
+      <h2 v-if="">Success! Image uploaded to bucket.</h2>
+     </form>
 </div>
 
 
@@ -42,8 +36,11 @@ export default {
   name: 'app',
     data () {
       return {
-        image: '',
-        uploadURL: ''
+        name: '',
+        age: '',
+        empcode: '',
+        image: null,
+        : ''
       }
     },
   methods: {
@@ -86,15 +83,27 @@ export default {
         array.push(binary.charCodeAt(i))
       }
       let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
-      console.log('Uploading to: ', response.data.uploadURL)
-      const result = await fetch(response.data.uploadURL, {
+      console.log('Uploading to: ', response.data.)
+      const result = await fetch(response.data., {
         method: 'PUT',
         body: blobData
       })
       console.log('Result: ', result)
       // Final URL for the user doesn't need the query string params
-      this.uploadURL = response.data.uploadURL.split('?')[0]
-    }
+      this. = response.data..split('?')[0]
+    },
+    validateName() {
+       const regex = /^[A-Za-z\s]+$/;
+       this.nameError = regex.test(this.name) ? "" : "Name should contain only alphabets.";
+     },
+     validateAge() {
+       const regex = /^[0-9]+$/;
+       this.ageError = regex.test(this.age) ? "" : "Age should contain only numbers.";
+     },
+     validateEmpCode() {
+        const regex = /^[A-Za-z0-9]+$/;
+        this.empCodeError = regex.test(this.empCode) ? "" : "Employee Code should be alphanumeric only.";
+      }
   }
 }
 </script>
