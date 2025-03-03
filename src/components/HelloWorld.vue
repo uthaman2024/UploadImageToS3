@@ -1,27 +1,18 @@
+
 <template>
  <div id="app">
     <h1>Employee Registration Application</h1>
-    <form @submit.prevent="submitForm">
-      <input v-model="name" placeholder="Enter Name" @input="validateName" required />
-      <span v-if="nameError" style="color: red;">{{ nameError }}</span>
-      <br /><br />
-      <input v-model="age" type="text" placeholder="Enter Age" @input="validateAge" required />
-      <span v-if="ageError" style="color: red;">{{ ageError }}</span>
-      <br /><br />
-      <input v-model="empcode" placeholder="Enter Employee Code" @input="validateEmpCode" required />
-      <span v-if="empCodeError" style="color: red;">{{ empCodeError }}</span>
-      <br /><br />    
-      <div v-if="!image">
-        <h2>Select an image</h2>
-        <input type="file" @change="onFileChange">
-      </div>
-      <div v-else>
-        <img :src="image" />
-        <button v-if="!" @click="removeImage">Remove image</button>
-        <button v-if="!" @click="uploadImage">Upload image</button>
-      </div>
-      <h2 v-if="">Success! Image uploaded to bucket.</h2>
-     </form>
+
+    <div v-if="!image">
+      <h2>Select an image</h2>
+      <input type="file" @change="onFileChange">
+    </div>
+    <div v-else>
+      <img :src="image" />
+      <button v-if="!uploadURL" @click="removeImage">Remove image</button>
+      <button v-if="!uploadURL" @click="uploadImage">Upload image</button>
+    </div>
+    <h2 v-if="uploadURL">Success! Image uploaded to bucket.</h2>
 </div>
 
 
@@ -31,24 +22,19 @@
 //import Vue from 'vue/dist/vue.js';
 import axios from "axios";
 
-const MAX_IMAGE_SIZE = 2000000
+const MAX_IMAGE_SIZE = 1000000
 
 /* ENTER YOUR ENDPOINT HERE
    FILES UPLOADED TO MY ENDPOINT ARE AUTOMATICALLY DELETED EVERY FEW HOURS */
 
-const API_ENDPOINT = 'https://8rckx0sfz0.execute-api.us-east-1.amazonaws.com/default/serverlessfunction2025'
+const API_ENDPOINT = 'https://c1os4xvwji.execute-api.us-east-1.amazonaws.com/default/myfirstlambda'
 
 export default {
   name: 'app',
     data () {
       return {
-        name: '',
-        age: '',
-        empcode: '',
-        image: null,
-        nameError: "",
-        ageError: "",
-        empCodeError: "",
+        image: '',
+        uploadURL: ''
       }
     },
   methods: {
@@ -91,27 +77,15 @@ export default {
         array.push(binary.charCodeAt(i))
       }
       let blobData = new Blob([new Uint8Array(array)], {type: 'image/jpeg'})
-      console.log('Uploading to: ', response.data.)
-      const result = await fetch(response.data., {
+      console.log('Uploading to: ', response.data.uploadURL)
+      const result = await fetch(response.data.uploadURL, {
         method: 'PUT',
         body: blobData
       })
       console.log('Result: ', result)
       // Final URL for the user doesn't need the query string params
-      this. = response.data..split('?')[0]
-    },
-    validateName() {
-       const regex = /^[A-Za-z\s]+$/;
-       this.nameError = regex.test(this.name) ? "" : "Name should contain only alphabets.";
-     },
-     validateAge() {
-       const regex = /^[0-9]+$/;
-       this.ageError = regex.test(this.age) ? "" : "Age should contain only numbers.";
-     },
-     validateEmpCode() {
-        const regex = /^[A-Za-z0-9]+$/;
-        this.empCodeError = regex.test(this.empCode) ? "" : "Employee Code should be alphanumeric only.";
-      }
+      this.uploadURL = response.data.uploadURL.split('?')[0]
+    }
   }
 }
 </script>
